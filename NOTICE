@@ -1,0 +1,61 @@
+feederline-mcp
+Copyright 2026 Kartha Energy
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+"Kartha" and "Kartha Energy" are names controlled by Kartha Energy; the license grants no rights to them.
+
+-------------------------------------------------------------------------------
+Third-party software used by this product
+-------------------------------------------------------------------------------
+
+OpenDSS (power-flow engine, used through the DSS C-API)
+  Copyright (c) 2008-2021, Electric Power Research Institute, Inc.
+  BSD-3-Clause. https://sourceforge.net/p/electricdss/code/HEAD/tree/trunk/License.txt
+
+DSS C-API and dss_python (DSS-Extensions)
+  Copyright (c) 2017-2024, Paulo Meira; DSS-Extensions contributors
+  BSD-3-Clause. https://github.com/dss-extensions/dss_capi  https://github.com/dss-extensions/dss_python
+
+PostgreSQL
+  PostgreSQL License. https://www.postgresql.org/about/licence/
+
+PostGIS
+  GPL-2.0-or-later (some bundled components MIT, BSD-3-Clause or public domain).
+  https://github.com/postgis/postgis/blob/master/LICENSE.TXT
+
+pgRouting
+  GPL-2.0-or-later (some components BSL-1.0 and MIT).
+  https://github.com/pgRouting/pgrouting/blob/main/LICENSE
+
+  PostGIS and pgRouting run as separate processes inside the feederline-postgis container image, installed
+  unmodified from the apt.postgresql.org Debian packages; their source is available from those packages and the
+  upstream repositories above. This product's code does not link against them.
+
+Python packages (installed from PyPI, not vendored): mcp (MIT), psycopg (LGPL-3.0-only), pydantic (MIT),
+uvicorn (BSD-3-Clause), numpy (BSD-3-Clause and others), matplotlib (Matplotlib/PSF-based license),
+pyarrow (Apache-2.0). npm packages: @modelcontextprotocol/sdk (MIT), commander (MIT).
+
+-------------------------------------------------------------------------------
+Data
+-------------------------------------------------------------------------------
+
+IEEE 13, 34 and 123 node test feeders (tests/fixtures/feeders/)
+  OpenDSS versions of the IEEE PES Distribution Test Feeders, as distributed in the OpenDSS repository
+  (Distrib/IEEETestCases) under its BSD-3-Clause license; the files carry no license of their own.
+  Feeder data: IEEE PES Distribution System Analysis Subcommittee, https://cmte.ieee.org/pes-testfeeders/
+
+NREL SMART-DS (downloaded at run time by `load smartds`; not distributed)
+  National Renewable Energy Laboratory, "SMART-DS Synthetic Electrical Network Data OpenDSS Models".
+  CC-BY-4.0. https://data.openei.org/submissions/2981
+
+HIFLD-schema mirrors (downloaded at run time by `load hifld`; not distributed)
+  U.S. Electric Power Transmission Lines (HIFLD, archive), U.S. Government data hosted by Esri's
+  Federal_User_Community under the Esri Master License Agreement.
+  https://services2.arcgis.com/FiaPA4ga0iQKduv3/arcgis/rest/services/US_Electric_Power_Transmission_Lines/FeatureServer/0
+  Electric Substations Southern California Clip (Robert Redford Conservancy, Pitzer College; sources SCAG, USGS,
+  CEC, CALGEM). CC-BY-SA-4.0.
+  https://services.arcgis.com/hVnyNvwbpFFPDV5j/arcgis/rest/services/CA_Substations_Final/FeatureServer/16
+
+tests/fixtures/pecan_sample.csv is synthetic data in the Pecan Street Dataport export format. No Pecan Street data
+is distributed; `loaders/pecan.py` reads the user's own export.

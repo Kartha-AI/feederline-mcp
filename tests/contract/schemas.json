@@ -1,0 +1,547 @@
+{
+ "analyze_capacity": {
+  "properties": {
+   "bus_mrid": {
+    "maxLength": 128,
+    "minLength": 1,
+    "title": "Bus Mrid",
+    "type": "string"
+   },
+   "constraints": {
+    "items": {
+     "enum": [
+      "overvoltage",
+      "thermal",
+      "reverse_flow"
+     ],
+     "type": "string"
+    },
+    "minItems": 1,
+    "title": "Constraints",
+    "type": "array"
+   },
+   "der_type": {
+    "default": "pv",
+    "enum": [
+     "pv",
+     "storage"
+    ],
+    "title": "Der Type",
+    "type": "string"
+   },
+   "max_kw": {
+    "default": 5000,
+    "exclusiveMinimum": 0,
+    "title": "Max Kw",
+    "type": "number"
+   },
+   "request_id": {
+    "anyOf": [
+     {
+      "maxLength": 128,
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Request Id"
+   },
+   "step_kw": {
+    "default": 250,
+    "exclusiveMinimum": 0,
+    "title": "Step Kw",
+    "type": "number"
+   }
+  },
+  "required": [
+   "bus_mrid"
+  ],
+  "title": "AnalyzeCapacityInput",
+  "type": "object"
+ },
+ "check_voltages": {
+  "properties": {
+   "limit": {
+    "default": 200,
+    "maximum": 5000,
+    "minimum": 1,
+    "title": "Limit",
+    "type": "integer"
+   },
+   "max_pu": {
+    "default": 1.05,
+    "exclusiveMaximum": 2,
+    "exclusiveMinimum": 0,
+    "title": "Max Pu",
+    "type": "number"
+   },
+   "min_pu": {
+    "default": 0.95,
+    "exclusiveMaximum": 2,
+    "exclusiveMinimum": 0,
+    "title": "Min Pu",
+    "type": "number"
+   },
+   "request_id": {
+    "anyOf": [
+     {
+      "maxLength": 128,
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Request Id"
+   }
+  },
+  "title": "CheckVoltagesInput",
+  "type": "object"
+ },
+ "create_visualization": {
+  "properties": {
+   "as": {
+    "default": "png",
+    "enum": [
+     "png",
+     "data"
+    ],
+    "title": "As",
+    "type": "string"
+   },
+   "plot": {
+    "enum": [
+     "voltage_profile",
+     "loading",
+     "capacity_curve",
+     "timeseries"
+    ],
+    "title": "Plot",
+    "type": "string"
+   },
+   "request_id": {
+    "anyOf": [
+     {
+      "maxLength": 128,
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Request Id"
+   },
+   "top_n": {
+    "default": 20,
+    "maximum": 100,
+    "minimum": 1,
+    "title": "Top N",
+    "type": "integer"
+   }
+  },
+  "required": [
+   "plot"
+  ],
+  "title": "VisualizationInput",
+  "type": "object"
+ },
+ "envelope": {
+  "$defs": {
+   "ErrorInfo": {
+    "additionalProperties": true,
+    "properties": {
+     "code": {
+      "title": "Code",
+      "type": "string"
+     },
+     "message": {
+      "title": "Message",
+      "type": "string"
+     }
+    },
+    "required": [
+     "code",
+     "message"
+    ],
+    "title": "ErrorInfo",
+    "type": "object"
+   },
+   "Meta": {
+    "properties": {
+     "duration_ms": {
+      "title": "Duration Ms",
+      "type": "integer"
+     },
+     "engine": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Engine"
+     },
+     "session_id": {
+      "title": "Session Id",
+      "type": "string"
+     },
+     "source": {
+      "title": "Source",
+      "type": "string"
+     },
+     "study_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Study Id"
+     }
+    },
+    "required": [
+     "session_id",
+     "engine",
+     "duration_ms",
+     "source"
+    ],
+    "title": "Meta",
+    "type": "object"
+   },
+   "ModelInfo": {
+    "properties": {
+     "buses": {
+      "default": 0,
+      "title": "Buses",
+      "type": "integer"
+     },
+     "case_kind": {
+      "title": "Case Kind",
+      "type": "string"
+     },
+     "cim_updated_at": {
+      "title": "Cim Updated At",
+      "type": "string"
+     },
+     "loads": {
+      "default": 0,
+      "title": "Loads",
+      "type": "integer"
+     },
+     "loads_measured": {
+      "default": 0,
+      "title": "Loads Measured",
+      "type": "integer"
+     },
+     "modified": {
+      "default": false,
+      "title": "Modified",
+      "type": "boolean"
+     },
+     "root_mrid": {
+      "title": "Root Mrid",
+      "type": "string"
+     },
+     "root_name": {
+      "title": "Root Name",
+      "type": "string"
+     },
+     "telemetry_ts": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Telemetry Ts"
+     }
+    },
+    "required": [
+     "root_mrid",
+     "root_name",
+     "case_kind",
+     "cim_updated_at"
+    ],
+    "title": "ModelInfo",
+    "type": "object"
+   }
+  },
+  "properties": {
+   "data": {
+    "anyOf": [
+     {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Data"
+   },
+   "errors": {
+    "anyOf": [
+     {
+      "items": {
+       "$ref": "#/$defs/ErrorInfo"
+      },
+      "type": "array"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Errors"
+   },
+   "meta": {
+    "$ref": "#/$defs/Meta"
+   },
+   "model": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/ModelInfo"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null
+   },
+   "success": {
+    "title": "Success",
+    "type": "boolean"
+   },
+   "warnings": {
+    "items": {
+     "type": "string"
+    },
+    "title": "Warnings",
+    "type": "array"
+   }
+  },
+  "required": [
+   "success",
+   "meta"
+  ],
+  "title": "Envelope",
+  "type": "object"
+ },
+ "load_feeder": {
+  "properties": {
+   "case": {
+    "default": "operational",
+    "enum": [
+     "operational",
+     "planning"
+    ],
+    "title": "Case",
+    "type": "string"
+   },
+   "region_code": {
+    "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+    "title": "Region Code",
+    "type": "string"
+   },
+   "request_id": {
+    "anyOf": [
+     {
+      "maxLength": 128,
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Request Id"
+   },
+   "root_mrid": {
+    "format": "uuid",
+    "title": "Root Mrid",
+    "type": "string"
+   }
+  },
+  "required": [
+   "root_mrid",
+   "region_code"
+  ],
+  "title": "LoadFeederInput",
+  "type": "object"
+ },
+ "optimize_der": {
+  "properties": {
+   "candidate_buses": {
+    "anyOf": [
+     {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 200,
+      "type": "array"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Candidate Buses"
+   },
+   "capacity_kw": {
+    "exclusiveMinimum": 0,
+    "maximum": 100000,
+    "title": "Capacity Kw",
+    "type": "number"
+   },
+   "der_type": {
+    "default": "pv",
+    "enum": [
+     "pv",
+     "storage"
+    ],
+    "title": "Der Type",
+    "type": "string"
+   },
+   "objective": {
+    "default": "losses",
+    "enum": [
+     "losses",
+     "voltage"
+    ],
+    "title": "Objective",
+    "type": "string"
+   },
+   "request_id": {
+    "anyOf": [
+     {
+      "maxLength": 128,
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Request Id"
+   }
+  },
+  "required": [
+   "capacity_kw"
+  ],
+  "title": "OptimizeDerInput",
+  "type": "object"
+ },
+ "run_power_flow": {
+  "properties": {
+   "control_mode": {
+    "default": "static",
+    "enum": [
+     "static",
+     "off"
+    ],
+    "title": "Control Mode",
+    "type": "string"
+   },
+   "max_iterations": {
+    "default": 100,
+    "maximum": 1000,
+    "minimum": 1,
+    "title": "Max Iterations",
+    "type": "integer"
+   },
+   "mode": {
+    "const": "snapshot",
+    "default": "snapshot",
+    "title": "Mode",
+    "type": "string"
+   },
+   "request_id": {
+    "anyOf": [
+     {
+      "maxLength": 128,
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Request Id"
+   }
+  },
+  "title": "PowerFlowInput",
+  "type": "object"
+ },
+ "run_timeseries": {
+  "properties": {
+   "date": {
+    "format": "date",
+    "title": "Date",
+    "type": "string"
+   },
+   "interval": {
+    "default": "15m",
+    "enum": [
+     "15m",
+     "1h"
+    ],
+    "title": "Interval",
+    "type": "string"
+   },
+   "max_pu": {
+    "default": 1.05,
+    "exclusiveMaximum": 2,
+    "exclusiveMinimum": 0,
+    "title": "Max Pu",
+    "type": "number"
+   },
+   "min_pu": {
+    "default": 0.95,
+    "exclusiveMaximum": 2,
+    "exclusiveMinimum": 0,
+    "title": "Min Pu",
+    "type": "number"
+   },
+   "request_id": {
+    "anyOf": [
+     {
+      "maxLength": 128,
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Request Id"
+   },
+   "source": {
+    "default": "rollups",
+    "enum": [
+     "rollups",
+     "ami"
+    ],
+    "title": "Source",
+    "type": "string"
+   }
+  },
+  "required": [
+   "date"
+  ],
+  "title": "TimeseriesInput",
+  "type": "object"
+ }
+}

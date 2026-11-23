@@ -1,0 +1,10 @@
+%syntax-version=1.0.0
+%project=opendss_cim
+
+network_model 2026-10-31T00:00:00Z Kartha Energy <dev@kartha.energy> # CIM Core/Wires tables and network_edges
+scada_telemetry [network_model] 2026-10-31T00:00:01Z Kartha Energy <dev@kartha.energy> # Meas/SCADA registry, partitioned telemetry, 15m rollup
+studies [network_model] 2026-10-31T00:00:02Z Kartha Energy <dev@kartha.energy> # studies schema
+roles_rls [scada_telemetry studies] 2026-10-31T00:00:03Z Kartha Energy <dev@kartha.energy> # roles, grants, region_isolation RLS
+split_phase_codes [network_model] 2026-10-31T00:00:04Z Kartha Energy <dev@kartha.energy> # terminal.phases accepts CIM s1, s2, s12
+hifld_staging [roles_rls] 2026-10-31T00:00:05Z Kartha Energy <dev@kartha.energy> # staging tables for HIFLD substations and transmission lines
+sql_tools_indexes [roles_rls] 2026-11-11T00:00:00Z Kartha Energy <dev@kartha.energy> # pg_trgm; name trigram indexes; updated_at index

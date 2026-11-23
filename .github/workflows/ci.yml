@@ -1,0 +1,82 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No platform-specific references
+        run: scripts/check-platform-refs.sh
+      - uses: astral-sh/setup-uv@v5
+      - name: Versions match (Python, npm)
+        run: uv run --no-project python scripts/check_versions.py
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --extra kafka
+      - name: Lint (ruff + import-linter)
+        run: make lint
+      - name: Start the compose stack
+        run: make up
+      - name: Load IEEE feeders and demo telemetry
+        run: make load-ieee demo DAYS=3
+      - name: Load SMART-DS and HIFLD (main only)
+        if: github.event_name == 'push'
+        run: make load-smartds REGION=P1R && make load-hifld STATE=CA
+      - name: Kafka profile (main only)
+        if: github.event_name == 'push'
+        run: make kafka
+      - name: Tests (slow performance gates on main only)
+        run: make test PYTEST_ARGS='${{ github.event_name == 'push' && '' || '-m "not slow"' }}'
+      - name: Failover
+        run: make ha-check
+      - name: Compose logs on failure
+        if: failure()
+        run: docker compose logs --tail 200
+
+  npm:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: npm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: npm/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+
+  npm-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build images locally
+        run: |
+          docker build -t feederline-mcp:ci .
+          docker build -t feederline-postgis:ci db
+      - name: up -> status -> down through the CLI
+        working-directory: npm
+        env:
+          FEEDERLINE_INTEGRATION: "1"
+          FEEDERLINE_NO_PULL: "1"
+          FEEDERLINE_IMAGE: feederline-mcp:ci
+          FEEDERLINE_PG_IMAGE: feederline-postgis:ci
+        run: npm ci && npm test

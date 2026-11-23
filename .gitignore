@@ -221,3 +221,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-local (not published)
+.DS_Store
+data/
+
+# npm CLI
+node_modules/
+npm/dist/
+*.tgz

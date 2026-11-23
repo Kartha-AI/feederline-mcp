@@ -1,0 +1,46 @@
+name: npm
+
+# Publishes the CLI after the images for the same tag were pushed. Images must be public on GHCR (or the
+# integration step logs in) because the CLI pulls them anonymously on users' machines.
+on:
+  workflow_run:
+    workflows: [images]
+    types: [completed]
+
+permissions:
+  contents: read
+  packages: read
+  id-token: write   # npm provenance
+
+jobs:
+  publish:
+    if: github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: astral-sh/setup-uv@v5
+      - name: Versions match (Python, npm, tag)
+        env:
+          GITHUB_REF: refs/tags/${{ github.event.workflow_run.head_branch }}
+        run: uv run --no-project python scripts/check_versions.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build, test, and run the integration test against the pushed images
+        working-directory: npm
+        env:
+          FEEDERLINE_INTEGRATION: "1"
+        run: npm ci && npm test
+      - name: Publish
+        working-directory: npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public

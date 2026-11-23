@@ -1,0 +1,55 @@
+{
+  "name": "@kartha-energy/feederline-mcp",
+  "version": "0.1.0",
+  "description": "Run the feederline-mcp server (CIM grid model on Postgres + OpenDSS power-flow studies over MCP) locally with Docker, and connect Claude to it.",
+  "license": "Apache-2.0",
+  "author": "Kartha Energy",
+  "type": "module",
+  "bin": {
+    "feederline-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "compose",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && vitest run",
+    "prepack": "node scripts/copy-license.mjs && npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kartha-energy/feederline-mcp.git",
+    "directory": "npm"
+  },
+  "homepage": "https://github.com/kartha-energy/feederline-mcp#readme",
+  "bugs": "https://github.com/kartha-energy/feederline-mcp/issues",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "opendss",
+    "power-flow",
+    "cim",
+    "distribution-grid",
+    "claude"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

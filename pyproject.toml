@@ -1,0 +1,86 @@
+[project]
+name = "feederline-mcp"
+version = "0.1.0"
+description = "CIM operational data store on Postgres plus an OpenDSS study engine, served to AI agents over MCP"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Kartha Energy" }]
+requires-python = ">=3.12,<3.13"
+keywords = ["mcp", "opendss", "cim", "power-systems", "distribution-grid", "postgis", "pgrouting"]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "mcp>=1.0,<2",
+    "dss-python>=0.15",
+    "psycopg[binary,pool]>=3.2",
+    "pydantic>=2",
+    "uvicorn",
+    "numpy",
+    "matplotlib",
+    "uuid6",
+    "pyarrow",
+]
+
+[project.optional-dependencies]
+kafka = [
+    "confluent-kafka>=2.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/kartha-energy/feederline-mcp"
+Issues = "https://github.com/kartha-energy/feederline-mcp/issues"
+
+[project.scripts]
+feederline-mcp-admin = "feederline_mcp.admin:main"
+rotate = "ingest.rotate:main"
+archive = "ingest.archive:main"
+kafka-writer = "ingest.kafka:main"
+
+# Data-source adapters: name -> factory(settings) -> (DataSource, StudySink, Auth). Selected by FEEDERLINE_MCP_ADAPTER.
+[project.entry-points."feederline_mcp.adapters"]
+local = "feederline_mcp.adapters.local:build"
+
+[dependency-groups]
+dev = ["pytest", "import-linter", "ruff"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["feederline_mcp", "loaders", "ingest"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["npm"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["db: requires the running Postgres (make up && make load-ieee)", "slow: performance gates (deselect with -m \"not slow\")"]
+
+[tool.importlinter]
+root_packages = ["feederline_mcp"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "tools and compiler depend only on the adapter seam"
+type = "forbidden"
+source_modules = ["feederline_mcp.tools", "feederline_mcp.compiler"]
+forbidden_modules = ["psycopg", "psycopg_pool", "confluent_kafka", "feederline_mcp.adapters.local", "feederline_mcp.config", "feederline_mcp.admin"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "SQL tools never touch sessions or the engine"
+type = "forbidden"
+source_modules = ["feederline_mcp.tools.sql"]
+forbidden_modules = ["feederline_mcp.engine", "feederline_mcp.sessions", "feederline_mcp.tools.engine", "feederline_mcp.compiler.emit", "feederline_mcp.compiler.report", "feederline_mcp.compiler.queries", "dss"]
+allow_indirect_imports = true

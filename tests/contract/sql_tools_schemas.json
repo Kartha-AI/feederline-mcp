@@ -1,0 +1,2228 @@
+{
+ "envelope": {
+  "$defs": {
+   "ErrorInfo": {
+    "additionalProperties": true,
+    "properties": {
+     "code": {
+      "title": "Code",
+      "type": "string"
+     },
+     "message": {
+      "title": "Message",
+      "type": "string"
+     }
+    },
+    "required": [
+     "code",
+     "message"
+    ],
+    "title": "ErrorInfo",
+    "type": "object"
+   },
+   "Meta": {
+    "properties": {
+     "duration_ms": {
+      "title": "Duration Ms",
+      "type": "integer"
+     },
+     "engine": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Engine"
+     },
+     "session_id": {
+      "title": "Session Id",
+      "type": "string"
+     },
+     "source": {
+      "title": "Source",
+      "type": "string"
+     },
+     "study_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Study Id"
+     }
+    },
+    "required": [
+     "session_id",
+     "engine",
+     "duration_ms",
+     "source"
+    ],
+    "title": "Meta",
+    "type": "object"
+   },
+   "ModelInfo": {
+    "properties": {
+     "buses": {
+      "default": 0,
+      "title": "Buses",
+      "type": "integer"
+     },
+     "case_kind": {
+      "title": "Case Kind",
+      "type": "string"
+     },
+     "cim_updated_at": {
+      "title": "Cim Updated At",
+      "type": "string"
+     },
+     "loads": {
+      "default": 0,
+      "title": "Loads",
+      "type": "integer"
+     },
+     "loads_measured": {
+      "default": 0,
+      "title": "Loads Measured",
+      "type": "integer"
+     },
+     "modified": {
+      "default": false,
+      "title": "Modified",
+      "type": "boolean"
+     },
+     "root_mrid": {
+      "title": "Root Mrid",
+      "type": "string"
+     },
+     "root_name": {
+      "title": "Root Name",
+      "type": "string"
+     },
+     "telemetry_ts": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "default": null,
+      "title": "Telemetry Ts"
+     }
+    },
+    "required": [
+     "root_mrid",
+     "root_name",
+     "case_kind",
+     "cim_updated_at"
+    ],
+    "title": "ModelInfo",
+    "type": "object"
+   }
+  },
+  "properties": {
+   "data": {
+    "anyOf": [
+     {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Data"
+   },
+   "errors": {
+    "anyOf": [
+     {
+      "items": {
+       "$ref": "#/$defs/ErrorInfo"
+      },
+      "type": "array"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "Errors"
+   },
+   "meta": {
+    "$ref": "#/$defs/Meta"
+   },
+   "model": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/ModelInfo"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null
+   },
+   "success": {
+    "title": "Success",
+    "type": "boolean"
+   },
+   "warnings": {
+    "items": {
+     "type": "string"
+    },
+    "title": "Warnings",
+    "type": "array"
+   }
+  },
+  "required": [
+   "success",
+   "meta"
+  ],
+  "title": "Envelope",
+  "type": "object"
+ },
+ "inputs": {
+  "affected_by_area": {
+   "$defs": {
+    "Polygon": {
+     "properties": {
+      "coordinates": {
+       "items": {},
+       "title": "Coordinates",
+       "type": "array"
+      },
+      "type": {
+       "enum": [
+        "Polygon",
+        "MultiPolygon"
+       ],
+       "title": "Type",
+       "type": "string"
+      }
+     },
+     "required": [
+      "type",
+      "coordinates"
+     ],
+     "title": "Polygon",
+     "type": "object"
+    }
+   },
+   "additionalProperties": false,
+   "properties": {
+    "case": {
+     "default": "operational",
+     "enum": [
+      "operational",
+      "planning"
+     ],
+     "title": "Case",
+     "type": "string"
+    },
+    "detail": {
+     "default": "aggregated",
+     "enum": [
+      "summary",
+      "aggregated",
+      "full"
+     ],
+     "title": "Detail",
+     "type": "string"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "polygon": {
+     "$ref": "#/$defs/Polygon"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "simplify_m": {
+     "default": 5.0,
+     "maximum": 500,
+     "minimum": 0,
+     "title": "Simplify M",
+     "type": "number"
+    }
+   },
+   "required": [
+    "region_code",
+    "polygon"
+   ],
+   "title": "AffectedByAreaInput",
+   "type": "object"
+  },
+  "compare_cases": {
+   "$defs": {
+    "Action": {
+     "additionalProperties": false,
+     "properties": {
+      "kind": {
+       "enum": [
+        "open",
+        "close",
+        "tap",
+        "cap"
+       ],
+       "title": "Kind",
+       "type": "string"
+      },
+      "mrid": {
+       "maxLength": 200,
+       "minLength": 1,
+       "title": "Mrid",
+       "type": "string"
+      },
+      "value": {
+       "anyOf": [
+        {
+         "type": "number"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "default": null,
+       "title": "Value"
+      }
+     },
+     "required": [
+      "mrid",
+      "kind"
+     ],
+     "title": "Action",
+     "type": "object"
+    }
+   },
+   "properties": {
+    "actions": {
+     "items": {
+      "$ref": "#/$defs/Action"
+     },
+     "maxItems": 20,
+     "title": "Actions",
+     "type": "array"
+    },
+    "baseline": {
+     "default": "planning",
+     "enum": [
+      "current",
+      "operational",
+      "planning"
+     ],
+     "title": "Baseline",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "title": "CompareCasesInput",
+   "type": "object"
+  },
+  "connectivity_report": {
+   "additionalProperties": false,
+   "properties": {
+    "feeder_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Feeder Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "feeder_mrid"
+   ],
+   "title": "ConnectivityReportInput",
+   "type": "object"
+  },
+  "describe_equipment": {
+   "additionalProperties": false,
+   "properties": {
+    "mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "mrid"
+   ],
+   "title": "DescribeEquipmentInput",
+   "type": "object"
+  },
+  "equipment_near": {
+   "additionalProperties": false,
+   "properties": {
+    "cim_class": {
+     "anyOf": [
+      {
+       "pattern": "^[A-Za-z]{1,40}$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Cim Class"
+    },
+    "lat": {
+     "maximum": 90,
+     "minimum": -90,
+     "title": "Lat",
+     "type": "number"
+    },
+    "limit": {
+     "default": 100,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "lon": {
+     "maximum": 180,
+     "minimum": -180,
+     "title": "Lon",
+     "type": "number"
+    },
+    "radius_m": {
+     "default": 500,
+     "exclusiveMinimum": 0,
+     "maximum": 25000,
+     "title": "Radius M",
+     "type": "number"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "lat",
+    "lon"
+   ],
+   "title": "EquipmentNearInput",
+   "type": "object"
+  },
+  "fault_study": {
+   "properties": {
+    "bus": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Bus",
+     "type": "string"
+    },
+    "fault_type": {
+     "default": "3ph",
+     "enum": [
+      "3ph",
+      "slg",
+      "ll"
+     ],
+     "title": "Fault Type",
+     "type": "string"
+    },
+    "impedance_ohm": {
+     "default": 0.0,
+     "maximum": 1000,
+     "minimum": 0,
+     "title": "Impedance Ohm",
+     "type": "number"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "bus"
+   ],
+   "title": "FaultStudyInput",
+   "type": "object"
+  },
+  "feeder_geometry": {
+   "additionalProperties": false,
+   "properties": {
+    "detail": {
+     "default": "aggregated",
+     "enum": [
+      "summary",
+      "aggregated",
+      "full"
+     ],
+     "title": "Detail",
+     "type": "string"
+    },
+    "feeder_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Feeder Mrid",
+     "type": "string"
+    },
+    "include": {
+     "items": {
+      "enum": [
+       "segments",
+       "devices",
+       "loads"
+      ],
+      "type": "string"
+     },
+     "minItems": 1,
+     "title": "Include",
+     "type": "array"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "simplify_m": {
+     "default": 5.0,
+     "maximum": 500,
+     "minimum": 0,
+     "title": "Simplify M",
+     "type": "number"
+    }
+   },
+   "required": [
+    "region_code",
+    "feeder_mrid"
+   ],
+   "title": "FeederGeometryInput",
+   "type": "object"
+  },
+  "find_path": {
+   "additionalProperties": false,
+   "properties": {
+    "case": {
+     "default": "operational",
+     "enum": [
+      "operational",
+      "planning"
+     ],
+     "title": "Case",
+     "type": "string"
+    },
+    "from_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "From Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "to_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "To Mrid",
+     "type": "string"
+    }
+   },
+   "required": [
+    "region_code",
+    "from_mrid",
+    "to_mrid"
+   ],
+   "title": "FindPathInput",
+   "type": "object"
+  },
+  "isolate": {
+   "additionalProperties": false,
+   "properties": {
+    "case": {
+     "default": "operational",
+     "enum": [
+      "operational",
+      "planning"
+     ],
+     "title": "Case",
+     "type": "string"
+    },
+    "mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "mrid"
+   ],
+   "title": "IsolateInput",
+   "type": "object"
+  },
+  "latest_readings": {
+   "additionalProperties": false,
+   "properties": {
+    "feeder_mrid": {
+     "anyOf": [
+      {
+       "maxLength": 200,
+       "minLength": 1,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Feeder Mrid"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "measurement_type": {
+     "anyOf": [
+      {
+       "enum": [
+        "ThreePhaseActivePower",
+        "ThreePhaseReactivePower",
+        "LineToLineVoltage",
+        "LineCurrent",
+        "Frequency",
+        "SwitchPosition",
+        "TapPosition"
+       ],
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Measurement Type"
+    },
+    "mrid": {
+     "anyOf": [
+      {
+       "maxLength": 200,
+       "minLength": 1,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Mrid"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code"
+   ],
+   "title": "LatestReadingsInput",
+   "type": "object"
+  },
+  "limit_exceedances": {
+   "additionalProperties": false,
+   "properties": {
+    "feeder_mrid": {
+     "anyOf": [
+      {
+       "maxLength": 200,
+       "minLength": 1,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Feeder Mrid"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code"
+   ],
+   "title": "LimitExceedancesInput",
+   "type": "object"
+  },
+  "line_loading": {
+   "properties": {
+    "as": {
+     "default": "table",
+     "enum": [
+      "table",
+      "map"
+     ],
+     "title": "As",
+     "type": "string"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "threshold_pct": {
+     "default": 80,
+     "maximum": 1000,
+     "minimum": 0,
+     "title": "Threshold Pct",
+     "type": "number"
+    }
+   },
+   "title": "LineLoadingInput",
+   "type": "object"
+  },
+  "load_profile": {
+   "additionalProperties": false,
+   "properties": {
+    "date": {
+     "format": "date",
+     "title": "Date",
+     "type": "string"
+    },
+    "feeder_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Feeder Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "feeder_mrid",
+    "date"
+   ],
+   "title": "LoadProfileInput",
+   "type": "object"
+  },
+  "losses_by_segment": {
+   "properties": {
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "top_n": {
+     "default": 20,
+     "maximum": 500,
+     "minimum": 1,
+     "title": "Top N",
+     "type": "integer"
+    }
+   },
+   "title": "LossesInput",
+   "type": "object"
+  },
+  "measurement_history": {
+   "additionalProperties": false,
+   "properties": {
+    "from": {
+     "format": "date-time",
+     "title": "From",
+     "type": "string"
+    },
+    "measurement_mrids": {
+     "items": {
+      "maxLength": 200,
+      "minLength": 1,
+      "type": "string"
+     },
+     "maxItems": 12,
+     "minItems": 1,
+     "title": "Measurement Mrids",
+     "type": "array"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "stat": {
+     "default": "avg",
+     "enum": [
+      "avg",
+      "min",
+      "max",
+      "last"
+     ],
+     "title": "Stat",
+     "type": "string"
+    },
+    "to": {
+     "format": "date-time",
+     "title": "To",
+     "type": "string"
+    }
+   },
+   "required": [
+    "region_code",
+    "measurement_mrids",
+    "from",
+    "to"
+   ],
+   "title": "MeasurementHistoryInput",
+   "type": "object"
+  },
+  "model_changes": {
+   "additionalProperties": false,
+   "properties": {
+    "feeder_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Feeder Mrid",
+     "type": "string"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "since": {
+     "maxLength": 64,
+     "minLength": 1,
+     "title": "Since",
+     "type": "string"
+    }
+   },
+   "required": [
+    "region_code",
+    "feeder_mrid",
+    "since"
+   ],
+   "title": "ModelChangesInput",
+   "type": "object"
+  },
+  "nearest_substation": {
+   "additionalProperties": false,
+   "properties": {
+    "k": {
+     "default": 3,
+     "maximum": 20,
+     "minimum": 1,
+     "title": "K",
+     "type": "integer"
+    },
+    "lat": {
+     "maximum": 90,
+     "minimum": -90,
+     "title": "Lat",
+     "type": "number"
+    },
+    "lon": {
+     "maximum": 180,
+     "minimum": -180,
+     "title": "Lon",
+     "type": "number"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "lat",
+    "lon"
+   ],
+   "title": "NearestSubstationInput",
+   "type": "object"
+  },
+  "peak_load": {
+   "additionalProperties": false,
+   "properties": {
+    "feeder_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Feeder Mrid",
+     "type": "string"
+    },
+    "from": {
+     "format": "date",
+     "title": "From",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "to": {
+     "format": "date",
+     "title": "To",
+     "type": "string"
+    }
+   },
+   "required": [
+    "region_code",
+    "feeder_mrid",
+    "from",
+    "to"
+   ],
+   "title": "PeakLoadInput",
+   "type": "object"
+  },
+  "phase_balance": {
+   "properties": {
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "title": "PhaseBalanceInput",
+   "type": "object"
+  },
+  "regulator_status": {
+   "properties": {
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "title": "RegulatorStatusInput",
+   "type": "object"
+  },
+  "search_equipment": {
+   "additionalProperties": false,
+   "properties": {
+    "cim_class": {
+     "anyOf": [
+      {
+       "pattern": "^[A-Za-z]{1,40}$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Cim Class"
+    },
+    "limit": {
+     "default": 20,
+     "maximum": 200,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "query": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Query",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "query"
+   ],
+   "title": "SearchEquipmentInput",
+   "type": "object"
+  },
+  "set_control": {
+   "$defs": {
+    "Action": {
+     "additionalProperties": false,
+     "properties": {
+      "kind": {
+       "enum": [
+        "open",
+        "close",
+        "tap",
+        "cap"
+       ],
+       "title": "Kind",
+       "type": "string"
+      },
+      "mrid": {
+       "maxLength": 200,
+       "minLength": 1,
+       "title": "Mrid",
+       "type": "string"
+      },
+      "value": {
+       "anyOf": [
+        {
+         "type": "number"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "default": null,
+       "title": "Value"
+      }
+     },
+     "required": [
+      "mrid",
+      "kind"
+     ],
+     "title": "Action",
+     "type": "object"
+    }
+   },
+   "properties": {
+    "actions": {
+     "items": {
+      "$ref": "#/$defs/Action"
+     },
+     "maxItems": 20,
+     "minItems": 1,
+     "title": "Actions",
+     "type": "array"
+    },
+    "max_iterations": {
+     "default": 100,
+     "maximum": 1000,
+     "minimum": 1,
+     "title": "Max Iterations",
+     "type": "integer"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "actions"
+   ],
+   "title": "SetControlInput",
+   "type": "object"
+  },
+  "telemetry_quality": {
+   "additionalProperties": false,
+   "properties": {
+    "days": {
+     "default": 7,
+     "maximum": 31,
+     "minimum": 1,
+     "title": "Days",
+     "type": "integer"
+    },
+    "feeder_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Feeder Mrid",
+     "type": "string"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "feeder_mrid"
+   ],
+   "title": "TelemetryQualityInput",
+   "type": "object"
+  },
+  "tie_options": {
+   "additionalProperties": false,
+   "properties": {
+    "feeder_mrid": {
+     "anyOf": [
+      {
+       "maxLength": 200,
+       "minLength": 1,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Feeder Mrid"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    },
+    "section_root_mrid": {
+     "anyOf": [
+      {
+       "maxLength": 200,
+       "minLength": 1,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Section Root Mrid"
+    }
+   },
+   "required": [
+    "region_code"
+   ],
+   "title": "TieOptionsInput",
+   "type": "object"
+  },
+  "trace_downstream": {
+   "additionalProperties": false,
+   "properties": {
+    "case": {
+     "default": "operational",
+     "enum": [
+      "operational",
+      "planning"
+     ],
+     "title": "Case",
+     "type": "string"
+    },
+    "detail": {
+     "default": "aggregated",
+     "enum": [
+      "summary",
+      "aggregated",
+      "full"
+     ],
+     "title": "Detail",
+     "type": "string"
+    },
+    "limit": {
+     "default": 500,
+     "maximum": 5000,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    },
+    "mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "mrid"
+   ],
+   "title": "TraceDownstreamInput",
+   "type": "object"
+  },
+  "trace_upstream": {
+   "additionalProperties": false,
+   "properties": {
+    "case": {
+     "default": "operational",
+     "enum": [
+      "operational",
+      "planning"
+     ],
+     "title": "Case",
+     "type": "string"
+    },
+    "mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "mrid"
+   ],
+   "title": "TraceUpstreamInput",
+   "type": "object"
+  },
+  "validate_feeder": {
+   "additionalProperties": false,
+   "properties": {
+    "case": {
+     "default": "operational",
+     "enum": [
+      "operational",
+      "planning"
+     ],
+     "title": "Case",
+     "type": "string"
+    },
+    "feeder_mrid": {
+     "maxLength": 200,
+     "minLength": 1,
+     "title": "Feeder Mrid",
+     "type": "string"
+    },
+    "region_code": {
+     "pattern": "^[A-Za-z0-9_\\-]{1,64}$",
+     "title": "Region Code",
+     "type": "string"
+    },
+    "request_id": {
+     "anyOf": [
+      {
+       "maxLength": 128,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Request Id"
+    }
+   },
+   "required": [
+    "region_code",
+    "feeder_mrid"
+   ],
+   "title": "ValidateFeederInput",
+   "type": "object"
+  }
+ },
+ "shapes": {
+  "map": {
+   "$defs": {
+    "Feature": {
+     "properties": {
+      "geometry": {
+       "additionalProperties": true,
+       "title": "Geometry",
+       "type": "object"
+      },
+      "properties": {
+       "additionalProperties": true,
+       "title": "Properties",
+       "type": "object"
+      },
+      "type": {
+       "const": "Feature",
+       "default": "Feature",
+       "title": "Type",
+       "type": "string"
+      }
+     },
+     "required": [
+      "geometry",
+      "properties"
+     ],
+     "title": "Feature",
+     "type": "object"
+    }
+   },
+   "properties": {
+    "bbox": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "number"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Bbox"
+    },
+    "features": {
+     "items": {
+      "$ref": "#/$defs/Feature"
+     },
+     "title": "Features",
+     "type": "array"
+    },
+    "resource": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resource"
+    },
+    "summary": {
+     "additionalProperties": true,
+     "title": "Summary",
+     "type": "object"
+    },
+    "truncated": {
+     "default": false,
+     "title": "Truncated",
+     "type": "boolean"
+    },
+    "type": {
+     "const": "FeatureCollection",
+     "default": "FeatureCollection",
+     "title": "Type",
+     "type": "string"
+    },
+    "viz": {
+     "const": "map",
+     "default": "map",
+     "title": "Viz",
+     "type": "string"
+    }
+   },
+   "required": [
+    "features"
+   ],
+   "title": "MapData",
+   "type": "object"
+  },
+  "path": {
+   "$defs": {
+    "Hop": {
+     "additionalProperties": true,
+     "properties": {
+      "cim_class": {
+       "title": "Cim Class",
+       "type": "string"
+      },
+      "km": {
+       "title": "Km",
+       "type": "number"
+      },
+      "mrid": {
+       "format": "uuid",
+       "title": "Mrid",
+       "type": "string"
+      },
+      "name": {
+       "title": "Name",
+       "type": "string"
+      },
+      "open": {
+       "anyOf": [
+        {
+         "type": "boolean"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "default": null,
+       "title": "Open"
+      },
+      "protective": {
+       "title": "Protective",
+       "type": "boolean"
+      },
+      "seq": {
+       "title": "Seq",
+       "type": "integer"
+      }
+     },
+     "required": [
+      "seq",
+      "mrid",
+      "name",
+      "cim_class",
+      "protective",
+      "km"
+     ],
+     "title": "Hop",
+     "type": "object"
+    }
+   },
+   "properties": {
+    "from": {
+     "additionalProperties": true,
+     "title": "From",
+     "type": "object"
+    },
+    "hops": {
+     "items": {
+      "$ref": "#/$defs/Hop"
+     },
+     "title": "Hops",
+     "type": "array"
+    },
+    "resource": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resource"
+    },
+    "summary": {
+     "additionalProperties": true,
+     "title": "Summary",
+     "type": "object"
+    },
+    "to": {
+     "anyOf": [
+      {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "To"
+    },
+    "truncated": {
+     "default": false,
+     "title": "Truncated",
+     "type": "boolean"
+    },
+    "viz": {
+     "const": "path",
+     "default": "path",
+     "title": "Viz",
+     "type": "string"
+    }
+   },
+   "required": [
+    "from",
+    "to"
+   ],
+   "title": "PathData",
+   "type": "object"
+  },
+  "profile": {
+   "$defs": {
+    "ProfilePoint": {
+     "properties": {
+      "bus": {
+       "title": "Bus",
+       "type": "string"
+      },
+      "distance_km": {
+       "title": "Distance Km",
+       "type": "number"
+      },
+      "mrid": {
+       "anyOf": [
+        {
+         "format": "uuid",
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Mrid"
+      },
+      "name": {
+       "title": "Name",
+       "type": "string"
+      },
+      "phase": {
+       "title": "Phase",
+       "type": "string"
+      },
+      "value": {
+       "title": "Value",
+       "type": "number"
+      }
+     },
+     "required": [
+      "bus",
+      "mrid",
+      "name",
+      "distance_km",
+      "phase",
+      "value"
+     ],
+     "title": "ProfilePoint",
+     "type": "object"
+    }
+   },
+   "properties": {
+    "points": {
+     "items": {
+      "$ref": "#/$defs/ProfilePoint"
+     },
+     "title": "Points",
+     "type": "array"
+    },
+    "resource": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resource"
+    },
+    "summary": {
+     "additionalProperties": true,
+     "title": "Summary",
+     "type": "object"
+    },
+    "truncated": {
+     "default": false,
+     "title": "Truncated",
+     "type": "boolean"
+    },
+    "viz": {
+     "const": "profile",
+     "default": "profile",
+     "title": "Viz",
+     "type": "string"
+    },
+    "x_unit": {
+     "title": "X Unit",
+     "type": "string"
+    },
+    "y_unit": {
+     "title": "Y Unit",
+     "type": "string"
+    }
+   },
+   "required": [
+    "x_unit",
+    "y_unit",
+    "points"
+   ],
+   "title": "ProfileData",
+   "type": "object"
+  },
+  "table": {
+   "$defs": {
+    "Column": {
+     "properties": {
+      "key": {
+       "title": "Key",
+       "type": "string"
+      },
+      "label": {
+       "title": "Label",
+       "type": "string"
+      },
+      "unit": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "default": null,
+       "title": "Unit"
+      }
+     },
+     "required": [
+      "key",
+      "label"
+     ],
+     "title": "Column",
+     "type": "object"
+    }
+   },
+   "additionalProperties": true,
+   "properties": {
+    "columns": {
+     "items": {
+      "$ref": "#/$defs/Column"
+     },
+     "title": "Columns",
+     "type": "array"
+    },
+    "resource": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resource"
+    },
+    "rows": {
+     "items": {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     "title": "Rows",
+     "type": "array"
+    },
+    "summary": {
+     "additionalProperties": true,
+     "title": "Summary",
+     "type": "object"
+    },
+    "truncated": {
+     "default": false,
+     "title": "Truncated",
+     "type": "boolean"
+    },
+    "viz": {
+     "const": "table",
+     "default": "table",
+     "title": "Viz",
+     "type": "string"
+    }
+   },
+   "required": [
+    "columns",
+    "rows"
+   ],
+   "title": "TableData",
+   "type": "object"
+  },
+  "timeseries": {
+   "$defs": {
+    "Series": {
+     "properties": {
+      "mrid": {
+       "anyOf": [
+        {
+         "format": "uuid",
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "default": null,
+       "title": "Mrid"
+      },
+      "name": {
+       "title": "Name",
+       "type": "string"
+      },
+      "unit": {
+       "title": "Unit",
+       "type": "string"
+      },
+      "values": {
+       "items": {
+        "anyOf": [
+         {
+          "type": "number"
+         },
+         {
+          "type": "null"
+         }
+        ]
+       },
+       "title": "Values",
+       "type": "array"
+      }
+     },
+     "required": [
+      "name",
+      "unit",
+      "values"
+     ],
+     "title": "Series",
+     "type": "object"
+    }
+   },
+   "properties": {
+    "interval": {
+     "title": "Interval",
+     "type": "string"
+    },
+    "resource": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resource"
+    },
+    "series": {
+     "items": {
+      "$ref": "#/$defs/Series"
+     },
+     "title": "Series",
+     "type": "array"
+    },
+    "summary": {
+     "additionalProperties": true,
+     "title": "Summary",
+     "type": "object"
+    },
+    "truncated": {
+     "default": false,
+     "title": "Truncated",
+     "type": "boolean"
+    },
+    "ts": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Ts",
+     "type": "array"
+    },
+    "viz": {
+     "const": "timeseries",
+     "default": "timeseries",
+     "title": "Viz",
+     "type": "string"
+    }
+   },
+   "required": [
+    "interval",
+    "ts",
+    "series"
+   ],
+   "title": "TimeseriesData",
+   "type": "object"
+  },
+  "tree": {
+   "$defs": {
+    "TreeNode": {
+     "additionalProperties": true,
+     "properties": {
+      "cim_class": {
+       "title": "Cim Class",
+       "type": "string"
+      },
+      "customers_downstream": {
+       "default": 0,
+       "title": "Customers Downstream",
+       "type": "integer"
+      },
+      "depth": {
+       "title": "Depth",
+       "type": "integer"
+      },
+      "km_downstream": {
+       "default": 0.0,
+       "title": "Km Downstream",
+       "type": "number"
+      },
+      "km_from_root": {
+       "title": "Km From Root",
+       "type": "number"
+      },
+      "kw_nameplate_downstream": {
+       "default": 0.0,
+       "title": "Kw Nameplate Downstream",
+       "type": "number"
+      },
+      "mrid": {
+       "format": "uuid",
+       "title": "Mrid",
+       "type": "string"
+      },
+      "name": {
+       "title": "Name",
+       "type": "string"
+      },
+      "open": {
+       "anyOf": [
+        {
+         "type": "boolean"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "default": null,
+       "title": "Open"
+      },
+      "parent": {
+       "anyOf": [
+        {
+         "format": "uuid",
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Parent"
+      }
+     },
+     "required": [
+      "mrid",
+      "name",
+      "cim_class",
+      "depth",
+      "parent",
+      "km_from_root"
+     ],
+     "title": "TreeNode",
+     "type": "object"
+    }
+   },
+   "properties": {
+    "edges": {
+     "items": {
+      "additionalProperties": true,
+      "type": "object"
+     },
+     "title": "Edges",
+     "type": "array"
+    },
+    "nodes": {
+     "items": {
+      "$ref": "#/$defs/TreeNode"
+     },
+     "title": "Nodes",
+     "type": "array"
+    },
+    "resource": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resource"
+    },
+    "root": {
+     "additionalProperties": true,
+     "title": "Root",
+     "type": "object"
+    },
+    "summary": {
+     "additionalProperties": true,
+     "title": "Summary",
+     "type": "object"
+    },
+    "truncated": {
+     "default": false,
+     "title": "Truncated",
+     "type": "boolean"
+    },
+    "viz": {
+     "const": "tree",
+     "default": "tree",
+     "title": "Viz",
+     "type": "string"
+    }
+   },
+   "required": [
+    "root"
+   ],
+   "title": "TreeData",
+   "type": "object"
+  }
+ }
+}
