@@ -54,7 +54,7 @@ export async function runChecks(): Promise<Check[]> {
   });
 
   const compose = running ? detectCompose() : null;
-  checks.push({ name: "Docker Compose v2", ok: Boolean(compose), detail: compose ? compose.join(" ") : "not found", fix: "Update Docker Desktop, or install the compose plugin (https://docs.docker.com/compose/install/)", critical: true });
+  checks.push({ name: "Docker Compose (v2+)", ok: Boolean(compose), detail: compose ? compose.join(" ") : "not found", fix: "Update Docker Desktop, or install the compose plugin (https://docs.docker.com/compose/install/)", critical: true });
 
   const state = readState();
   const ours = await getHealth(endpoint(state).url, 1500); // our own server already holding the port is fine
