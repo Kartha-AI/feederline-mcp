@@ -6,5 +6,5 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 # postgis, pgrouting, uuid-ossp on first start
 COPY init/ /docker-entrypoint-initdb.d/
-LABEL org.opencontainers.image.source="https://github.com/kartha-energy/feederline-mcp" \
+LABEL org.opencontainers.image.source="https://github.com/Kartha-AI/feederline-mcp" \
       org.opencontainers.image.title="feederline-postgis"

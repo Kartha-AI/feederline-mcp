@@ -34,11 +34,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kartha-energy/feederline-mcp.git",
+    "url": "git+https://github.com/Kartha-AI/feederline-mcp.git",
     "directory": "npm"
   },
-  "homepage": "https://github.com/kartha-energy/feederline-mcp#readme",
-  "bugs": "https://github.com/kartha-energy/feederline-mcp/issues",
+  "homepage": "https://github.com/Kartha-AI/feederline-mcp#readme",
+  "bugs": "https://github.com/Kartha-AI/feederline-mcp/issues",
   "keywords": [
     "mcp",
     "model-context-protocol",
