@@ -20,13 +20,21 @@ export function dockerInstalled(): boolean {
   return r.status === 0;
 }
 
-/** `docker compose` (v2 plugin) or the standalone `docker-compose` v2 binary. */
+/** Major version from `compose version --short` output such as "2.34.0", "v2.29.1" or "5.0.1"; null if unparseable. */
+export function composeMajor(version: string): number | null {
+  const m = /^v?(\d+)\./.exec(version.trim());
+  return m ? Number(m[1]) : null;
+}
+
+const supported = (version: string) => (composeMajor(version) ?? 0) >= 2;
+
+/** `docker compose` (plugin) or the standalone `docker-compose` binary, version 2 or later (v1 lacks the syntax we use). */
 export function detectCompose(): string[] | null {
   if (composeCmd) return composeCmd;
   const plugin = spawnSync("docker", ["compose", "version", "--short"], { encoding: "utf8" });
-  if (plugin.status === 0 && /^v?2\./.test(plugin.stdout.trim())) return (composeCmd = ["docker", "compose"]);
+  if (plugin.status === 0 && supported(plugin.stdout)) return (composeCmd = ["docker", "compose"]);
   const standalone = spawnSync("docker-compose", ["version", "--short"], { encoding: "utf8" });
-  if (standalone.status === 0 && /^v?2\./.test(standalone.stdout.trim())) return (composeCmd = ["docker-compose"]);
+  if (standalone.status === 0 && supported(standalone.stdout)) return (composeCmd = ["docker-compose"]);
   return null;
 }
 
