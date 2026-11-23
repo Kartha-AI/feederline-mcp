@@ -11,7 +11,7 @@ COPY pyproject.toml uv.lock README.md LICENSE NOTICE ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY . .
 RUN uv sync --frozen --no-dev
-LABEL org.opencontainers.image.source="https://github.com/kartha-energy/feederline-mcp" \
+LABEL org.opencontainers.image.source="https://github.com/Kartha-AI/feederline-mcp" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.title="feederline-mcp"
 EXPOSE 8000

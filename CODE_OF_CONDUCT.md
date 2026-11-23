@@ -6,5 +6,5 @@ In short: be respectful, assume good faith, and keep discussion focused on the w
 are not tolerated.
 
 Report unacceptable behaviour privately to the maintainers through a
-[private security advisory](https://github.com/kartha-energy/feederline-mcp/security/advisories/new) marked
+[private security advisory](https://github.com/Kartha-AI/feederline-mcp/security/advisories/new) marked
 "Code of Conduct", or by contacting a maintainer directly. Reports are handled confidentially.

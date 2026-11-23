@@ -5,7 +5,7 @@ name: ${FEEDERLINE_PROJECT:-feederline-mcp}
 
 services:
   postgres:
-    image: ${FEEDERLINE_PG_IMAGE:-ghcr.io/kartha-energy/feederline-postgis:${FEEDERLINE_VERSION:?set by the CLI}}
+    image: ${FEEDERLINE_PG_IMAGE:-ghcr.io/kartha-ai/feederline-postgis:${FEEDERLINE_VERSION:?set by the CLI}}
     environment: { POSTGRES_DB: grid, POSTGRES_USER: grid, POSTGRES_PASSWORD: grid }
     ports: ["127.0.0.1:${FEEDERLINE_PG_PORT:-5433}:5432"]
     volumes: ["feederline_pgdata:/var/lib/postgresql/data"]
@@ -15,7 +15,7 @@ services:
   # One-shot administration: migrate, load, simulate, status. Run with `docker compose run --rm admin <args>`.
   admin:
     profiles: [admin]
-    image: ${FEEDERLINE_IMAGE:-ghcr.io/kartha-energy/feederline-mcp:${FEEDERLINE_VERSION:?set by the CLI}}
+    image: ${FEEDERLINE_IMAGE:-ghcr.io/kartha-ai/feederline-mcp:${FEEDERLINE_VERSION:?set by the CLI}}
     entrypoint: ["feederline-mcp-admin"]
     environment:
       ADMIN_DATABASE_URL: postgresql://grid:grid@postgres/grid
@@ -27,7 +27,7 @@ services:
     depends_on: { postgres: { condition: service_healthy } }
 
   mcp:
-    image: ${FEEDERLINE_IMAGE:-ghcr.io/kartha-energy/feederline-mcp:${FEEDERLINE_VERSION:?set by the CLI}}
+    image: ${FEEDERLINE_IMAGE:-ghcr.io/kartha-ai/feederline-mcp:${FEEDERLINE_VERSION:?set by the CLI}}
     hostname: mcp
     environment:
       FEEDERLINE_MCP_ADAPTER: local

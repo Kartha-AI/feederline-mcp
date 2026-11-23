@@ -58,7 +58,7 @@ Notes:
 
 ## What you can ask
 
-The [Claude playbook](https://github.com/kartha-energy/feederline-mcp/blob/main/docs/playbook.md) is a 13-lesson learning path for Claude Desktop: concepts, prompts to type,
+The [Claude playbook](https://github.com/Kartha-AI/feederline-mcp/blob/main/docs/playbook.md) is a 13-lesson learning path for Claude Desktop: concepts, prompts to type,
 what to look for in each answer, a prompt cheat sheet and a self-check quiz. A few prompts from it:
 
 - "List the feeders available, with region, substation and nominal voltage."
@@ -158,15 +158,15 @@ shared snapshot directory (`SNAPSHOT_DIR`).
 
 | Document | What it covers |
 | --- | --- |
-| [docs/playbook.md](https://github.com/kartha-energy/feederline-mcp/blob/main/docs/playbook.md) | Learning the grid with Claude Desktop: concepts, 13 lessons, cheat sheet, quiz |
-| [tests/inspector.md](https://github.com/kartha-energy/feederline-mcp/blob/main/tests/inspector.md) | Exploring every tool with the MCP Inspector, field by field |
+| [docs/playbook.md](https://github.com/Kartha-AI/feederline-mcp/blob/main/docs/playbook.md) | Learning the grid with Claude Desktop: concepts, 13 lessons, cheat sheet, quiz |
+| [tests/inspector.md](https://github.com/Kartha-AI/feederline-mcp/blob/main/tests/inspector.md) | Exploring every tool with the MCP Inspector, field by field |
 
 ## Contributing, security, license
 
-- [CONTRIBUTING.md](https://github.com/kartha-energy/feederline-mcp/blob/main/CONTRIBUTING.md): DCO sign-off (`git commit -s`), running the tests, code rules.
-- [SECURITY.md](https://github.com/kartha-energy/feederline-mcp/blob/main/SECURITY.md): report vulnerabilities privately.
-- [CODE_OF_CONDUCT.md](https://github.com/kartha-energy/feederline-mcp/blob/main/CODE_OF_CONDUCT.md).
-- Licensed under the [Apache License 2.0](https://github.com/kartha-energy/feederline-mcp/blob/main/LICENSE). Third-party components and data: [NOTICE](https://github.com/kartha-energy/feederline-mcp/blob/main/NOTICE).
+- [CONTRIBUTING.md](https://github.com/Kartha-AI/feederline-mcp/blob/main/CONTRIBUTING.md): DCO sign-off (`git commit -s`), running the tests, code rules.
+- [SECURITY.md](https://github.com/Kartha-AI/feederline-mcp/blob/main/SECURITY.md): report vulnerabilities privately.
+- [CODE_OF_CONDUCT.md](https://github.com/Kartha-AI/feederline-mcp/blob/main/CODE_OF_CONDUCT.md).
+- Licensed under the [Apache License 2.0](https://github.com/Kartha-AI/feederline-mcp/blob/main/LICENSE). Third-party components and data: [NOTICE](https://github.com/Kartha-AI/feederline-mcp/blob/main/NOTICE).
 
 ## Production and commercial support
 

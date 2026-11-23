@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 Please report vulnerabilities privately through GitHub's
-[private vulnerability reporting](https://github.com/kartha-energy/feederline-mcp/security/advisories/new) for this
+[private vulnerability reporting](https://github.com/Kartha-AI/feederline-mcp/security/advisories/new) for this
 repository. Do not open a public issue.
 
 Include the affected version, a description, and steps to reproduce. We aim to acknowledge reports within three
