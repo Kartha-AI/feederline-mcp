@@ -7,10 +7,11 @@ RUN apt-get update \
 COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /usr/local/bin/uv
 WORKDIR /app
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv PATH=/opt/venv/bin:$PATH
+# The kafka extra is included so the same image runs the optional kafka-writer service.
 COPY pyproject.toml uv.lock README.md LICENSE NOTICE ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN uv sync --frozen --no-dev --extra kafka --no-install-project
 COPY . .
-RUN uv sync --frozen --no-dev
+RUN uv sync --frozen --no-dev --extra kafka
 LABEL org.opencontainers.image.source="https://github.com/Kartha-AI/feederline-mcp" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.title="feederline-mcp"
