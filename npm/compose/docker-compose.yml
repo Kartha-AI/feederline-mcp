@@ -1,0 +1,52 @@
+# feederline-mcp stack used by `npx -y @kartha-energy/feederline-mcp up`.
+# Published images pinned to the npm package version; every port binds to 127.0.0.1 only.
+# FEEDERLINE_IMAGE / FEEDERLINE_PG_IMAGE override the images (for testing locally built ones).
+name: ${FEEDERLINE_PROJECT:-feederline-mcp}
+
+services:
+  postgres:
+    image: ${FEEDERLINE_PG_IMAGE:-ghcr.io/kartha-energy/feederline-postgis:${FEEDERLINE_VERSION:?set by the CLI}}
+    environment: { POSTGRES_DB: grid, POSTGRES_USER: grid, POSTGRES_PASSWORD: grid }
+    ports: ["127.0.0.1:${FEEDERLINE_PG_PORT:-5433}:5432"]
+    volumes: ["feederline_pgdata:/var/lib/postgresql/data"]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U grid -d grid"], interval: 3s, retries: 40 }
+    restart: unless-stopped
+
+  # One-shot administration: migrate, load, simulate, status. Run with `docker compose run --rm admin <args>`.
+  admin:
+    profiles: [admin]
+    image: ${FEEDERLINE_IMAGE:-ghcr.io/kartha-energy/feederline-mcp:${FEEDERLINE_VERSION:?set by the CLI}}
+    entrypoint: ["feederline-mcp-admin"]
+    environment:
+      ADMIN_DATABASE_URL: postgresql://grid:grid@postgres/grid
+      LOADER_DATABASE_URL: postgresql://grid_load:grid_load@postgres/grid
+      WRITER_DATABASE_URL: postgresql://grid_write:grid_write@postgres/grid
+      SMARTDS_DIR: /data/smartds
+      HISTORY_DIR: /data/parquet
+    volumes: ["feederline_data:/data"]
+    depends_on: { postgres: { condition: service_healthy } }
+
+  mcp:
+    image: ${FEEDERLINE_IMAGE:-ghcr.io/kartha-energy/feederline-mcp:${FEEDERLINE_VERSION:?set by the CLI}}
+    hostname: mcp
+    environment:
+      FEEDERLINE_MCP_ADAPTER: local
+      DATABASE_URL: postgresql://mcp:mcp@postgres/grid
+      MCP_BEARER_TOKEN: ${FEEDERLINE_MCP_TOKEN:?set by the CLI}
+      MCP_AUTH: "on"
+      MAX_CONTEXTS: "8"
+      HISTORY_DIR: /data/parquet
+      SNAPSHOT_DIR: /snapshots
+    ports: ["127.0.0.1:${FEEDERLINE_MCP_PORT:-8000}:8000"]
+    volumes: ["feederline_snapshots:/snapshots", "feederline_data:/data"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 3s
+      retries: 40
+    depends_on: { postgres: { condition: service_healthy } }
+    restart: unless-stopped
+
+volumes:
+  feederline_pgdata: {}
+  feederline_snapshots: {}
+  feederline_data: {}

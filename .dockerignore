@@ -1,0 +1,12 @@
+.git
+.venv
+.DS_Store
+**/__pycache__
+.pytest_cache
+.ruff_cache
+data
+dist
+docs
+npm
+node_modules
+.github

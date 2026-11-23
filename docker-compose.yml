@@ -1,0 +1,73 @@
+# From-source stack (make up): builds both images locally, two MCP replicas behind nginx, static dev token.
+# The npm CLI ships its own compose files (npm/compose/) that pull published images and use a random token.
+name: feederline-mcp-dev
+
+services:
+  postgres:
+    build: ./db                                # postgres:17 + postgis 3.5 + pgrouting; init SQL baked in
+    environment: { POSTGRES_DB: grid, POSTGRES_USER: grid, POSTGRES_PASSWORD: grid }
+    ports: ["127.0.0.1:${PG_PORT:-5433}:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U grid -d grid"], interval: 5s, retries: 20 }
+
+  migrate:
+    build: .
+    command: ["feederline-mcp-admin", "migrate"]
+    environment:
+      ADMIN_DATABASE_URL: postgresql://grid:grid@postgres/grid
+    depends_on: { postgres: { condition: service_healthy } }
+
+  mcp-a: &mcp
+    build: .
+    command: ["uvicorn", "feederline_mcp.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+    hostname: mcp-a
+    environment: &mcp_env
+      FEEDERLINE_MCP_ADAPTER: local
+      DATABASE_URL: postgresql://mcp:mcp@postgres/grid
+      MCP_BEARER_TOKEN: dev-token              # from-source only; the npm path generates a random token
+      MCP_AUTH: ${MCP_AUTH:-on}
+      MAX_CONTEXTS: "8"
+      HISTORY_DIR: /data/parquet
+      SNAPSHOT_DIR: /data/snapshots          # shared by both replicas: the rehydration store
+    volumes: ["./data:/data"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 5s
+      retries: 20
+    depends_on: { migrate: { condition: service_completed_successfully } }
+
+  mcp-b:
+    <<: *mcp
+    hostname: mcp-b
+
+  proxy:
+    image: nginx:1.27-alpine
+    volumes: ["./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro"]
+    ports: ["127.0.0.1:${MCP_PORT:-8000}:8000"]
+    depends_on: { mcp-a: { condition: service_healthy }, mcp-b: { condition: service_healthy } }
+
+  simulator:
+    profiles: [sim]
+    build: .
+    command: ["python", "-m", "ingest.simulate", "--scan-seconds", "10"]
+    environment: { DATABASE_URL: postgresql://grid_write:grid_write@postgres/grid }
+    depends_on: [proxy]
+
+  redpanda:
+    profiles: [kafka]
+    image: redpandadata/redpanda:v24.2.7
+    command: ["redpanda", "start", "--smp", "1", "--overprovisioned", "--mode", "dev-container",
+              "--kafka-addr", "internal://0.0.0.0:29092,external://0.0.0.0:9092",
+              "--advertise-kafka-addr", "internal://redpanda:29092,external://localhost:${KAFKA_PORT:-19092}"]
+    ports: ["127.0.0.1:${KAFKA_PORT:-19092}:9092"]
+    healthcheck: { test: ["CMD", "rpk", "cluster", "health", "--exit-when-healthy"], interval: 5s, retries: 20 }
+
+  kafka-writer:
+    profiles: [kafka]
+    build: .
+    command: ["python", "-m", "ingest.kafka", "--bootstrap", "redpanda:29092"]
+    environment: { DATABASE_URL: postgresql://grid_write:grid_write@postgres/grid }
+    depends_on: { redpanda: { condition: service_healthy }, migrate: { condition: service_completed_successfully } }
+
+volumes: { pgdata: {} }
