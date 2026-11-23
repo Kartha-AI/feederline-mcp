@@ -14,6 +14,7 @@ YESTERDAY     := $(shell date -v-1d +%F 2>/dev/null || date -d yesterday +%F)
 .PHONY: kafka ha-check up down demo status npm-build version-check load-ieee load-smartds load-hifld load-pecan sim rotate refresh-rollups archive test test-unit inspect lint fixtures
 
 up:            ## compose up with migrations
+	@mkdir -p data/snapshots data/parquet  # create as the host user; on Linux docker would create the ./data mount as root
 	PG_PORT=$(PG_PORT) MCP_PORT=$(MCP_PORT) docker compose up -d --build --wait postgres mcp-a mcp-b proxy
 
 down:          ## down, volumes kept
