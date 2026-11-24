@@ -6,7 +6,27 @@ A CIM (IEC 61970-301) operational data store on PostgreSQL + PostGIS + pgRouting
 server that compiles any distribution feeder from it into an in-process OpenDSS circuit, so AI agents such as Claude
 can run power-flow, hosting-capacity, voltage, fault and time-series studies on a utility network model.
 
+## In Claude Desktop
+
+Claude calls the tools, then draws the results. Each screenshot is one prompt.
+
+> "Plot the voltage profile by phase against distance from the head, with 0.95 and 1.05 pu limit lines."
+
+[![Voltage profile by phase against distance from the feeder head on IEEE 123, with 0.95 and 1.05 pu limit lines](images/plot.png)](images/plot.png)
+
+> "Load Feeder 123 on IEEE 123, run a power flow, and show line loading above 50% on the map in-line."
+
+[![IEEE 123 feeder map with lines above 50% loading highlighted by loading band](images/map.png)](images/map.png)
+
+> "Analyze PV hosting capacity at bus 65 on IEEE 123 in 250 kW steps up to 3,000 kW. Plot max voltage and max loading per step, and tell me which limit binds."
+
+[![PV hosting capacity sweep at bus 65 on IEEE 123: max voltage and max line loading per step, with the 500 kW hosting capacity marked](images/chart.png)](images/chart.png)
+
+## Architecture
+
 [![feederline-mcp architecture: Claude clients, the MCP server with SQL and engine tools, PostgreSQL with PostGIS and pgRouting, and the public data sources](images/arch.png)](images/arch.png)
+
+[![The 34 tools: 14 engine tools and 20 SQL tools, grouped by purpose](images/tools.png)](images/tools.png)
 
 > **Public data only.** The local stack is for public datasets (IEEE test feeders, NREL SMART-DS, HIFLD-schema
 > mirrors). Real utility network models and loading are CEII (Critical Energy/Electric Infrastructure Information)
@@ -71,8 +91,6 @@ what to look for in each answer, a prompt cheat sheet and a self-check quiz. A f
 
 ## Tools
 
-[![The 34 tools: 14 engine tools and 20 SQL tools, grouped by purpose](images/tools.png)](images/tools.png)
-
 34 MCP tools in two families, every result in the same envelope (`success`, `data`, `model`, `warnings`, `errors`, `meta`):
 
 - **Engine** (need `load_feeder` first): `load_feeder`, `run_power_flow`, `check_voltages`, `analyze_capacity`,
@@ -90,22 +108,6 @@ description (its docstring) states its inputs, outputs and units.
 
 No tool writes to the network model, switch states or telemetry. `set_control` changes only the in-memory circuit of
 your session.
-
-### In Claude Desktop
-
-Claude calls the tools, then draws the results. Each screenshot is one prompt.
-
-> "Plot the voltage profile by phase against distance from the head, with 0.95 and 1.05 pu limit lines."
-
-[![Voltage profile by phase against distance from the feeder head on IEEE 123, with 0.95 and 1.05 pu limit lines](images/plot.png)](images/plot.png)
-
-> "Load Feeder 123 on IEEE 123, run a power flow, and show line loading above 50% on the map in-line."
-
-[![IEEE 123 feeder map with lines above 50% loading highlighted by loading band](images/map.png)](images/map.png)
-
-> "Analyze PV hosting capacity at bus 65 on IEEE 123 in 250 kW steps up to 3,000 kW. Plot max voltage and max loading per step, and tell me which limit binds."
-
-[![PV hosting capacity sweep at bus 65 on IEEE 123: max voltage and max line loading per step, with the 500 kW hosting capacity marked](images/chart.png)](images/chart.png)
 
 ## CLI
 

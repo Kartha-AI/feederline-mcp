@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.1 (2026-11-23)
+
+- Server image includes the `kafka` extra, so the optional `kafka-writer` service starts.
+- CLI accepts Docker Compose v2 and later (v5 was rejected).
+- README: architecture and tools diagrams, Claude Desktop screenshots.
+
+## 0.1.0 (2026-11-23)
 
 First public release.
 
