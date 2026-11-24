@@ -1,6 +1,6 @@
 {
   "name": "@kartha-energy/feederline-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Run the feederline-mcp server (CIM grid model on Postgres + OpenDSS power-flow studies over MCP) locally with Docker, and connect Claude to it.",
   "license": "Apache-2.0",
   "author": "Kartha Energy",
