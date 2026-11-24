@@ -6,6 +6,8 @@ A CIM (IEC 61970-301) operational data store on PostgreSQL + PostGIS + pgRouting
 server that compiles any distribution feeder from it into an in-process OpenDSS circuit, so AI agents such as Claude
 can run power-flow, hosting-capacity, voltage, fault and time-series studies on a utility network model.
 
+Built and maintained by [Kartha Energy](https://kartha.energy), the energy and utilities practice of Kartha AI.
+
 ## In Claude Desktop
 
 Claude calls the tools, then draws the results. Each screenshot is one prompt.
@@ -190,6 +192,11 @@ shared snapshot directory (`SNAPSHOT_DIR`).
 - [CODE_OF_CONDUCT.md](https://github.com/Kartha-AI/feederline-mcp/blob/main/CODE_OF_CONDUCT.md).
 - Licensed under the [Apache License 2.0](https://github.com/Kartha-AI/feederline-mcp/blob/main/LICENSE). Third-party components and data: [NOTICE](https://github.com/Kartha-AI/feederline-mcp/blob/main/NOTICE).
 
-## Production and commercial support
+## About Kartha Energy
 
-For production deployments, other data platforms and support, see [kartha.energy](https://kartha.energy).
+feederline-mcp is created by [Kartha Energy](https://kartha.energy), the energy and utilities practice of Kartha AI.
+Kartha Energy builds applied AI for regulated utilities: agentic workflows on frontier models, delivered by
+forward-deployed engineers on a context and trust layer brought to every engagement. feederline-mcp is the open-source
+grid layer of that work.
+
+For production deployments, connectors to other data platforms and support, see [kartha.energy](https://kartha.energy).
