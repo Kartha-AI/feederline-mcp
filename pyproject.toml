@@ -1,6 +1,6 @@
 [project]
 name = "feederline-mcp"
-version = "0.1.0"
+version = "0.1.1"
 description = "CIM operational data store on Postgres plus an OpenDSS study engine, served to AI agents over MCP"
 readme = "README.md"
 license = "Apache-2.0"
